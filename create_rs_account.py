@@ -48,7 +48,7 @@ def register_account(email, password):
         'agree_email': 1,
         'agree_email_third_party' : 1,
         'g-recaptcha-response' : solve_captcha(),
-        'submit': 'Play Now'
+        'create-submit': 'Play Now'
     })
 
     if response.status_code == requests.codes.ok:
@@ -56,7 +56,7 @@ def register_account(email, password):
             print('Robots win again, account successfully registered\n\n')
 
             with open('rsaccounts.created.txt', 'a+') as f:
-                f.write('%s:%s:%s\n' % (email, password, name))
+                f.write('%s:%s\n' % (email, password))
                 f.close()
 
         else:

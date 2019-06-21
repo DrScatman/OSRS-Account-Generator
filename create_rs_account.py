@@ -44,9 +44,12 @@ def register_account(email, password, name, age = 26):
         'onlyOneEmail': 1,
         'password1': password,
         'onlyOnePassword': 1,
-        'displayname': name,
-        'age': age,
+        'day': 12,
+        'month': 12,
+        'year' : 2000,
         'agree_email': 1,
+        'agree_email_third_party' : 1,
+        'g-recaptcha-response' : captcha
         'submit': 'Play Now'
     })
 

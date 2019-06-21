@@ -79,15 +79,15 @@ def solve_captcha():
         'pageurl': RUNESCAPE_REGISTER_URL
     })
     
-    print(response.text)
-
     if response.status_code != requests.codes.ok:
         raise Exception('2Captcha says no')
+        print(response.text)
 
     if '|' in response.text:
         _, captcha_id = response.text.split('|')
     else:
         raise Exception('Captcha request failed')
+        print(response.text)
 
     wait_for_captcha = WaitForCaptcha()
 

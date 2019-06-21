@@ -4,6 +4,7 @@ import requests
 import sys
 import time
 import os
+import xml.dom.createElemen
 
 
 RUNESCAPE_REGISTER_URL = 'https://secure.runescape.com/m=account-creation/g=oldscape/create_account'
@@ -31,13 +32,14 @@ class WaitForCaptcha():
             time.sleep(1)
 
 
-def register_account(captcha_response, email, password, name, age = 26):
+def register_account(email, password, name, age = 26):
     print('''Registering account with:
     Email: %s
     Password: %s
     Name: %s''' % (email, password, name))
+    dom = Document()
 
-    response = requests.post(RUNESCAPE_REGISTER_URL, data = {
+    response = requests.post(RUNESCAPE_REGISTER_URL, data={
         'email1': email,
         'onlyOneEmail': 1,
         'password1': password,
@@ -45,7 +47,6 @@ def register_account(captcha_response, email, password, name, age = 26):
         'displayname': name,
         'age': age,
         'agree_email': 1,
-        'g-recaptcha-response': captcha_response,
         'submit': 'Play Now'
     })
 
@@ -146,10 +147,10 @@ if args.list:
 
     for account in accounts:
         email, password, name = account.rstrip().split(':')
-        register_account(solve_captcha(), email, password, name)
+        register_account(email, password, name)
 
 elif args.email and args.password and args.name:
-    register_account(solve_captcha(), args.email[0], args.password[0], args.name[0])
+    register_account(args.email[0], args.password[0], args.name[0])
 
 else:
     print('Not enough arguments! Run with -h/--help for more info')

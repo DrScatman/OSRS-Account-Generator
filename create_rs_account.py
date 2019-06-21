@@ -94,7 +94,7 @@ def solve_captcha():
 
     print('Waiting for captcha (ID: %s) to be solved' % captcha_id)
     while waiting:
-        wait_for_captcha.sleep(15 if touched else 20)
+        wait_for_captcha.sleep(5 if touched else 15)
 
         touched = True
 

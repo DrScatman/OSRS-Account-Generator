@@ -37,6 +37,7 @@ def register_account(email, password, key):
     Password: %s ''' % (email, password))
 
     response = requests.post(RUNESCAPE_REGISTER_URL, data={
+        'theme' : 'oldschool',
         'email1': email,
         'onlyOneEmail': 1,
         'password1': password,

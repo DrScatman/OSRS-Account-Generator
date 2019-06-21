@@ -31,7 +31,7 @@ class WaitForCaptcha():
             time.sleep(1)
 
 
-def register_account(email, password, key):
+def register_account(email, password):
     print('''Registering account with:
     Email: %s
     Password: %s ''' % (email, password))
@@ -47,7 +47,7 @@ def register_account(email, password, key):
         'year' : 2000,
         'agree_email': 1,
         'agree_email_third_party' : 1,
-        'g-recaptcha-response' : key,
+        'g-recaptcha-response' : solve_captcha(),
         'submit': 'Play Now'
     })
 
@@ -110,5 +110,42 @@ def solve_captcha():
             _, captcha_solution = solution_response.text.split('|')
             return captcha_solution
 
-args = ['bllitzer20000@yahoo.com', 'plmmlp']
-register_account(args[0], args[1], solve_captcha())
+if not len(sys.argv) > 1:
+    print('You forgot to pass in any arguments! Run with -h/--help for more info')
+    sys.exit()
+
+parser = argparse.ArgumentParser(description='Create Runescape account(s)\n'
+    'Pass new account details or path to a file with list of them',
+    formatter_class=argparse.RawTextHelpFormatter)
+
+single_acc_arg_group = parser.add_argument_group('Create a single account')
+
+single_acc_arg_group.add_argument('-e', '--email', nargs=1,
+    help='Email address to use for the new account')
+single_acc_arg_group.add_argument('-p', '--password', nargs=1,
+    help='Password')
+
+acc_list_arg_group = parser.add_argument_group('Create accounts from a list')
+
+acc_list_arg_group.add_argument('-l', '--list', nargs=1,
+    help='''Path to file with list of new account details
+        Syntax within files should match:
+        email:password''')
+
+args = parser.parse_args()
+
+if args.list:
+    accounts_file = open(args.list[0])
+    accounts = accounts_file.readlines()
+    accounts_file.close()
+
+    for account in accounts:
+        email, password = account.rstrip().split(':')
+        register_account(email, password)
+
+elif args.email and args.password:
+    register_account(args.email[0], args.password[0])
+
+else:
+    print('Not enough arguments! Run with -h/--help for more info')
+    
